@@ -2,7 +2,10 @@
 
 #define GRAFO_H
 
+#include <stdbool.h>
+
 #define MAXVERTICES 100 /*maximo numero de nodos*/
+#define MAXNOMBRES 100 /*maxima longitud nombres*/
 
 /*
  * Implementación estática del TAD grafo con una matriz
@@ -12,7 +15,16 @@
 /////////////////////////////////////////////////////////// TIPOS DE DATOS
 
 //Información que se almacena en cada vértice
-typedef int tipovertice;
+typedef struct{
+    char nombre[MAXNOMBRES];
+    char region[MAXNOMBRES];
+} tipovertice;
+
+typedef struct{
+    float dist;
+    char tipo;
+} tipoconexiones;
+
 
 typedef struct tipografo * grafo;
 
@@ -41,13 +53,13 @@ int insertar_vertice(grafo *G, tipovertice Vert);
 void borrar_vertice(grafo *G, tipovertice Vert);
 
 //Crea el arco de relación entre VERTICES(pos1) y VERTICES(pos2)
-void crear_arco(grafo *G, int pos1, int pos2);
+void crear_arco(grafo *G, int pos1, int pos2, float dist, char tipo);
 
 //Borra el arco de relación entre VERTICES(pos1) y VERTICES(pos2)
 void borrar_arco(grafo *G, int pos1, int pos2);
 
 //Devuelve 1 si VERTICES(pos1) y VERTICES(pos2) son vértices adyacentes
-int son_adyacentes(grafo G, int pos1, int pos2);
+bool son_adyacentes(grafo G, int pos1, int pos2);
 
 //Destruye el grafo
 void borrar_grafo(grafo *G);

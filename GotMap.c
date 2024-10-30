@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "grafo.h"
 
 //FUNCIONES DEL PROGRAMA DE PRUEBA DE GRAFOS
@@ -31,6 +32,8 @@ void eliminar_vertice(grafo *G) {
 
 void nuevo_arco(grafo *G) {
     tipovertice v1, v2;
+    float dist;
+    char tipo;
     //Insertamos una nueva relación pidiendo los datos al usuario controlando que existan los vértices
     printf("Nueva relacion vertice1-->vertice2\n");
     //Vértice origen del arco
@@ -47,9 +50,22 @@ void nuevo_arco(grafo *G) {
         printf("El vertice %d no existe en el grafo\n", v2);
         return;
     }
+    //Distancia
+    printf("Introduce la distancia: ");
+    scanf("%f",&dist);
+    if(dist<=0){
+        printf("No puedes usar una distancia negativa\n");
+        return;
+    }
+    printf("Introduce el tipo (t/m)");
+    scanf(" %c", &tipo);
+        if(tipo != 't' && tipo != 'm'){
+            printf("Tipo de dato incorrecto");
+            return;
+        }
     //Creación del arco
     if (!son_adyacentes(*G, posicion(*G, v1), posicion(*G, v2)))
-        crear_arco(G, posicion(*G, v1), posicion(*G, v2));
+        crear_arco(G, posicion(*G, v1), posicion(*G, v2), dist, tipo);
 }
 
 //Opción d del menú, eliminar una relación entre dos vértices

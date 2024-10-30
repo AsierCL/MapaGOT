@@ -1,6 +1,8 @@
 #include "grafo.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
 
 /////////////////////////////////////////////////////////// TIPOS DE DATOS
 
@@ -8,8 +10,13 @@
 struct tipografo {
     int N; //número de vértices del grafo
     tipovertice VERTICES[MAXVERTICES]; //vector de vértices
-    int A[MAXVERTICES][MAXVERTICES]; //matriz de adyacencia
+    tipoconexiones A[MAXVERTICES][MAXVERTICES]; //matriz de adyacencia
 };
+
+/* typedef struct{
+    char nombre[MAXNOMBRES];
+    char region[MAXNOMBRES];
+} tipovertice; */
 
 //////////////////////////////////////////////////////////////// FUNCIONES
 
@@ -19,7 +26,7 @@ struct tipografo {
  * y 1 en otro caso.
  */
 int _comparar_vertices(tipovertice V1, tipovertice V2){
-	return V1==V2 ? 0 : 1;
+	return strcmp(V1.nombre, V2.nombre) ? 0 : 1;
 }
 
 //Creación del grafo con 0 nodos
@@ -37,7 +44,7 @@ int posicion(grafo G, tipovertice V) {
         //if (G->VERTICES[contador]==V)  //encontré la posicion de V
 		if (_comparar_vertices(G->VERTICES[contador], V) == 0){
             return contador; 
-        }
+        }	
         contador++;
     }
     return -1;
@@ -55,17 +62,20 @@ int existe_vertice(grafo G, tipovertice V) {
 
 //Inserta un vértice en el grafo, devuelve -1 si no ha podido insertarlo por estar el grafo lleno
 int insertar_vertice(grafo *G, tipovertice Vert) {
-    int i;
+    tipoconexiones nulo;
+    nulo.dist = 0;
+    nulo.tipo = '0';
+
     if ((*G)->N == MAXVERTICES) {
     	// Se ha llegado al maximo numero de vertices
     	return -1;
     }
-   
+
     (*G)->N++;
     (*G)->VERTICES[((*G)->N) - 1] = Vert;
-    for (i = 0; i < (*G)->N; i++) {
-        (*G)->A[i][((*G)->N) - 1] = 0;
-        (*G)->A[((*G)->N) - 1][i] = 0;
+    for (int i = 0; i < (*G)->N; i++) {
+        (*G)->A[i][((*G)->N) - 1] = nulo;
+        (*G)->A[((*G)->N) - 1][i] = nulo;
     }
 	return (*G)->N-1;
 }
@@ -95,19 +105,23 @@ void borrar_vertice(grafo *G, tipovertice Vert) {
 }
 
 //Crea el arco de relación entre VERTICES(pos1) y VERTICES(pos2)
-void crear_arco(grafo *G, int pos1, int pos2) {
-    (*G)->A[pos1][pos2] = 1;
-    (*G)->A[pos2][pos1] = 1;
+void crear_arco(grafo *G, int pos1, int pos2, float dist, char tipo) {
+    tipoconexiones conexion = {dist, tipo};
+    (*G)->A[pos1][pos2] = conexion;
+    (*G)->A[pos2][pos1] = conexion;
 }
 
 //Borra el arco de relación entre VERTICES(pos1) y VERTICES(pos2)
 void borrar_arco(grafo *G, int pos1, int pos2) {
-    (*G)->A[pos1][pos2] = 0;
+    tipoconexiones nulo = {0, '0'};
+    (*G)->A[pos1][pos2] = nulo;
 }
 
 //Devuelve 1 si VERTICES(pos1) y VERTICES(pos2) son vértices adyacentes
-int son_adyacentes(grafo G, int pos1, int pos2) {
-    return (G->A[pos1][pos2]);
+bool son_adyacentes(grafo G, int pos1, int pos2) {
+    tipoconexiones conexion = (G->A[pos1][pos2]);
+    
+    return (conexion.dist>0);
 }
 
 //Destruye el grafo
