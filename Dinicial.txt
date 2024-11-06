@@ -1,0 +1,47 @@
+ESTOS VALORES SON TENIENDO EN CUENTA EL ORDEN DE LOS VERTICES QUE TENEIS EN EL ENUNCIADO DE LA PRACTICA,
+EN EL EJEMPLO DE IMPRIMIR GRAFO
+
+Matriz de distancias inicial
+   0  INF  INF 1870  INF  INF  INF  410  INF  INF  INF  INF  INF  INF  INF  INF  INF  INF  INF  INF
+ INF   0    64  INF  INF  INF  INF  680  INF  INF  INF  INF  INF  INF  INF 1340  INF  INF  INF  INF
+ INF  64     0  INF  INF  INF  INF  INF  INF  INF  INF  INF  INF  INF 1050  INF  INF  INF  INF  INF
+1870  INF  INF    0  160  INF  560 2290  INF  INF  INF  550  560  INF  INF 2300  INF  INF 1050  INF
+ INF  INF  INF  160    0  INF  INF  INF  420  INF  INF  INF  INF  INF  INF  INF  INF  INF  INF  INF
+ INF  INF  INF  INF  INF    0  225  INF  INF  INF  INF  INF  INF  INF 2415  INF  INF  INF  INF  INF
+ INF  INF  INF  560  INF  225    0  INF  INF  INF  INF  INF  INF  INF  INF  INF  INF  INF  INF  INF
+ 410  680  INF 2290  INF  INF  INF    0  INF  INF  INF  INF  INF  400  INF 1300  INF  960  INF  INF
+ INF  INF  INF  INF  420  INF  INF  INF    0  INF  INF  INF  INF  INF  INF  INF  INF  INF  INF  INF
+ INF  INF  INF  INF  INF  INF  INF  INF  INF    0  530  INF  INF  INF  INF 1220  INF  INF  INF  INF
+ INF  INF  INF  INF  INF  INF  INF  INF  INF  530    0  INF  INF  INF  INF  INF  INF  INF  INF  480
+ INF  INF  INF  550  INF  INF  INF  INF  INF  INF  INF    0  INF  INF  INF  INF  INF  INF  INF  INF
+ INF  INF  INF  560  INF  INF  INF  INF  INF  INF  INF  INF    0  INF  INF  INF  INF  INF  INF  INF
+ INF  INF  INF  INF  INF  INF  INF  400  INF  INF  INF  INF  INF   0   500  INF  INF  INF  INF  INF
+ INF  INF 1050  INF  INF 2415  INF  INF  INF  INF  INF  INF  INF  500    0  INF  INF  INF  INF  INF
+ INF 1340  INF 2300  INF  INF  INF 1300  INF 1220  INF  INF  INF  INF  INF    0  630  INF  INF  INF
+ INF  INF  INF  INF  INF  INF  INF  INF  INF  INF  INF  INF  INF  INF  INF  630    0  INF  INF  INF
+ INF  INF  INF  INF  INF  INF  INF  960  INF  INF  INF  INF  INF  INF  INF  INF  INF    0  INF  INF
+ INF  INF  INF 1050  INF  INF  INF  INF  INF  INF  INF  INF  INF  INF  INF  INF  INF  INF    0  INF
+ INF  INF  INF  INF  INF  INF  INF  INF  INF  INF  480  INF  INF  INF  INF  INF  INF  INF  INF    0
+
+
+Matriz de v�rtice previo inicial
+    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0
+    0    0    1    0    0    0    0    1    0    0    0    0    0    0    0    1    0    0    0    0
+    0    2    0    0    0    0    0    0    0    0    0    0    0    0    2    0    0    0    0    0
+    3    0    0    0    3    0    3    3    0    0    0    3    3    0    0    3    0    0    3    0
+    0    0    0    4    0    0    0    0    4    0    0    0    0    0    0    0    0    0    0    0
+    0    0    0    0    0    0    5    0    0    0    0    0    0    0    5    0    0    0    0    0
+    0    0    0    6    0    6    0    0    0    0    0    0    0    0    0    0    0    0    0    0
+    7    7    0    7    0    0    0    0    0    0    0    0    0    7    0    7    0    7    0    0
+    0    0    0    0    8    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0
+    0    0    0    0    0    0    0    0    0    0    9    0    0    0    0    9    0    0    0    0
+    0    0    0    0    0    0    0    0    0   10    0    0    0    0    0    0    0    0    0   10
+    0    0    0   11    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0
+    0    0    0   12    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0
+    0    0    0    0    0    0    0   13    0    0    0    0    0    0   13    0    0    0    0    0
+    0    0   14    0    0   14    0    0    0    0    0    0    0   14    0    0    0    0    0    0
+    0   15    0   15    0    0    0   15    0   15    0    0    0    0    0    0   15    0    0    0
+    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0   16    0    0    0    0
+    0    0    0    0    0    0    0   17    0    0    0    0    0    0    0    0    0    0    0    0
+    0    0    0   18    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0
+    0    0    0    0    0    0    0    0    0    0   19    0    0    0    0    0    0    0    0    0
