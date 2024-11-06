@@ -116,7 +116,106 @@ void imprimir_grafo(grafo G) {
         //Chequeo sus arcos
         for (j = 0; j < N; j++)
             if (son_adyacentes(G, i, j))
-                printf("\t%s-->%.2f/%c-->%s\n", VECTOR[i].nombre, conexion_matriz(G,i,j).dist, conexion_matriz(G,i,j).tipo, VECTOR[j].nombre);
+                if(conexion_matriz(G,i,j).tipo=='t'){
+                    printf("\t%s-->%.2f-->%s\n", VECTOR[i].nombre, conexion_matriz(G,i,j).dist, VECTOR[j].nombre);
+                }else{
+                    printf("\t%s~~>%.2f~~>%s\n", VECTOR[i].nombre, conexion_matriz(G,i,j).dist, VECTOR[j].nombre);
+                }
     }
 }
 
+//////////////////////////////////////////////////////////
+
+void procesar_linea_ciudades(char* linea, grafo* G) {
+    tipovertice vertice;
+    char* token;
+    char* rest = linea;  // Variable auxiliar para strtok_r
+
+    // Token para el nombre
+    token = strtok_r(rest, "\t", &rest);
+    strcpy(vertice.nombre, token);
+    strcpy(vertice.region, rest);
+
+    insertar_vertice(G, vertice);
+}
+
+
+void cargarArchivoCiudades(char* nombre_archivo, grafo* G){
+    // Abro el archivo
+    FILE *archivo_personajes = fopen(nombre_archivo, "r");
+    if (archivo_personajes == NULL){
+        perror("Fallo al intentar abrir el archivo\n");
+        exit(1);
+    }
+
+    char linea[1024];
+    while (fgets(linea, sizeof(linea), archivo_personajes)) {
+        // Eliminar el salto de línea si existe
+        linea[strcspn(linea, "\n")] = 0;
+        procesar_linea_ciudades(linea, G);
+    }
+
+    // Cierro el archivo
+    fclose(archivo_personajes);
+}
+
+
+void procesar_linea_caminos(char* linea, grafo* G) {
+    tipoconexiones conexion;
+    tipovertice vertice;
+    int pos1, pos2;
+    char* token;
+    char* rest = linea;  // Variable auxiliar para strtok_r
+
+    token = strtok_r(rest, "\t", &rest);
+    if (token != NULL) {
+        strcpy(vertice.nombre, token);
+        pos1 = posicion(*G, vertice);
+    }
+    
+    token = strtok_r(rest, "\t", &rest);
+    if (token != NULL) {
+        strcpy(vertice.nombre, token);
+        pos2 = posicion(*G, vertice);
+    }
+    
+    // Token para si es de la realeza (royal)
+    token = strtok_r(rest, "\t", &rest);
+    if (token != NULL) {
+        conexion.dist = atof(token);  // Convertimos el string a float
+    }
+
+    token = strtok_r(rest, "\t", &rest);
+    if (token != NULL) {
+        if(strcmp(token,"land")==0){
+            conexion.tipo = 't';
+        }else if(strcmp(token,"sea")==0){
+            conexion.tipo = 'm';
+        }else{
+            perror("Error al añadir tipo de conexion");
+        }
+    }
+
+
+    crear_arco(G, pos1, pos2,conexion.dist, conexion.tipo);
+}
+
+
+void cargarArchivoCaminos(char* nombre_archivo, grafo* G){
+    // Abro el archivo
+    FILE *archivo_personajes = fopen(nombre_archivo, "r");
+    if (archivo_personajes == NULL){
+        perror("Fallo al intentar abrir el archivo\n");
+        exit(1);
+    }
+
+    char linea[1024];
+    while (fgets(linea, sizeof(linea), archivo_personajes)) {
+        // Eliminar el salto de línea si existe
+        linea[strcspn(linea, "\n")] = 0;
+        procesar_linea_caminos(linea, G);
+    }
+
+    // Cierro el archivo
+    fclose(archivo_personajes);
+}

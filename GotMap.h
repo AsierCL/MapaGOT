@@ -19,6 +19,10 @@ void eliminar_arco(grafo *G);
 //Opción i del menú, imprimir el grafo
 void imprimir_grafo(grafo G);
 
+//Cargar archivo
+void cargarArchivoCiudades(char* nombre_archivo, grafo* G);
+void cargarArchivoCaminos(char* nombre_archivo, grafo* G);
+
 
 #endif	/* FUNCIONES_H */
 

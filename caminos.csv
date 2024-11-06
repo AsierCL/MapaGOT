@@ -2,13 +2,13 @@ Casterly Rock	Lannisport	64	land
 Winterfell	Cerwyn	160	land
 Riverrun	Harrenhal	410	land
 Moat Cailin	Cerwyn	420	land
-Highgarden	Oldtown	530	land
-Winterfell	Whiteharbor	550	land
+Highgarden	Old Town	530	land
+Winterfell	White Harbor	550	land
 Winterfell	Dreadfort	560	land
 Winterfell	Deepwood Motte	560	land
 King's Landing	Storm's End	630	land
 Riverrun	Casterly Rock	680	land
-Dragonstone	Riverrun	960	land
+Dragon Stone	Riverrun	960	land
 Winterfell	Castle Black	1050	land
 Highgarden	King's Landing	1220	land
 Riverrun	King's Landing	1300	land
@@ -16,7 +16,9 @@ King's Landing	Casterly Rock	1340	land
 Winterfell	Harrenhal	1870	land
 Riverrun	Winterfell	2290	land
 King's Landing	Winterfell	2300	land
+Seagard	Riverrun	400	land
 Bear Island	Deepwood Motte	225	sea
 Bear Island	Iron Islands	2415	sea
 Iron Islands	Lannisport	1050	sea
-The Arbor	Oldtown	480	sea
+Iron Islands	Seagard	500	sea
+The Arbor	Old Town	480	sea
