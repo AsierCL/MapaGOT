@@ -13,11 +13,6 @@ struct tipografo {
     tipoconexiones A[MAXVERTICES][MAXVERTICES]; //matriz de adyacencia
 };
 
-/* typedef struct{
-    char nombre[MAXNOMBRES];
-    char region[MAXNOMBRES];
-} tipovertice; */
-
 //////////////////////////////////////////////////////////////// FUNCIONES
 
 //HAY QUE MODIFICAR ESTA FUNCIÓN SI SE CAMBIA EL TIPO DE DATO tipovertice
@@ -26,7 +21,7 @@ struct tipografo {
  * y 1 en otro caso.
  */
 int _comparar_vertices(tipovertice V1, tipovertice V2){
-	return strcmp(V1.nombre, V2.nombre) ? 0 : 1;
+	return strcmp(V1.nombre, V2.nombre)!=0;
 }
 
 //Creación del grafo con 0 nodos
@@ -140,3 +135,7 @@ tipovertice* array_vertices(grafo G) {
     return G->VERTICES;
 }
 
+//Devuelve el vector de vértices VERTICES del grafo G
+tipoconexiones conexion_matriz(grafo G, int i, int j) {
+    return G->A[i][j];
+}
