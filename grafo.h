@@ -70,4 +70,7 @@ int num_vertices(grafo G);
 //Devuelve el vector de vértices VERTICES del grafo G
 tipovertice* array_vertices(grafo G);
 
+//Devuelve la conexion en la posicion (i,j) de la matriz A
+tipoconexiones conexion_matriz(grafo G, int i, int j);
+
 #endif	/* GRAFO_H */

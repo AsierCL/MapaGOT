@@ -9,8 +9,11 @@
 
 void introducir_vertice(grafo *G) {
     tipovertice v1;
-    printf("Introduce vertice: ");
-    scanf("%d", &v1);
+    printf("Introduce el nombre de la ciudad: ");
+    scanf(" %[^\n\r]", &v1.nombre);
+    printf("Introduce la region a la que pertenece: ");
+    scanf(" %[^\n\r]", &v1.region);
+
     if (existe_vertice(*G, v1))
         printf("Ese vertice ya esta en el grafo\n");
     else
@@ -20,8 +23,8 @@ void introducir_vertice(grafo *G) {
 
 void eliminar_vertice(grafo *G) {
     tipovertice v1;
-    printf("Introduce vertice: ");
-    scanf("%d", &v1);
+    printf("Introduce la ciudad que quieres eliminar: ");
+    scanf(" %[^\n\r]", &v1);
     if (existe_vertice(*G, v1))
         borrar_vertice(G, v1);
     else
@@ -38,16 +41,16 @@ void nuevo_arco(grafo *G) {
     printf("Nueva relacion vertice1-->vertice2\n");
     //Vértice origen del arco
     printf("Introduce vertice origen: ");
-    scanf("%d", &v1);
+    scanf(" %[^\n\r]", &v1.nombre);
     if (!existe_vertice(*G, v1)) {
-        printf("El vertice %d no existe en el grafo\n", v1);
+        printf("El vertice %s no existe en el grafo\n", v1.nombre);
         return;
     }
     //Vértice destino del arco
     printf("Introduce vertice destino: ");
-    scanf("%d", &v2);
+    scanf(" %[^\n\r]", &v2.nombre);
     if (!existe_vertice(*G, v2)) {
-        printf("El vertice %d no existe en el grafo\n", v2);
+        printf("El vertice %s no existe en el grafo\n", v2.nombre);
         return;
     }
     //Distancia
@@ -57,7 +60,7 @@ void nuevo_arco(grafo *G) {
         printf("No puedes usar una distancia negativa\n");
         return;
     }
-    printf("Introduce el tipo (t/m)");
+    printf("Introduce el tipo (t/m): ");
     scanf(" %c", &tipo);
         if(tipo != 't' && tipo != 'm'){
             printf("Tipo de dato incorrecto");
@@ -75,21 +78,22 @@ void eliminar_arco(grafo *G) {
     printf("Eliminar relacion vertice1-->vertice2\n");
     //Vértice origen del arco
     printf("Introduce vertice origen: ");
-    scanf("%d", &v1);
+    scanf(" %[^\n\r]", &v1.nombre);
     if (!existe_vertice(*G, v1)) {
-        printf("El vertice %d no existe en el grafo\n", v1);
+        printf("El vertice %s no existe en el grafo\n", v1.nombre);
         return;
     }
     //Vértice destino del arco
     printf("Introduce vertice destino: ");
-    scanf("%d", &v2);
+    scanf(" %[^\n\r]", &v2.nombre);
     if (!existe_vertice(*G, v2)) {
-        printf("El vertice %d no existe en el grafo\n", v2);
+        printf("El vertice %s no existe en el grafo\n", v2.nombre);
         return;
     }
     //Eliminación del arco
     if (son_adyacentes(*G, posicion(*G, v1), posicion(*G, v2)))
         borrar_arco(G, posicion(*G, v1), posicion(*G, v2));
+        borrar_arco(G, posicion(*G, v2), posicion(*G, v1));
 }
 
 //Opción i del menú, imprimir el grafo
@@ -108,11 +112,11 @@ void imprimir_grafo(grafo G) {
     printf("El grafo actual es:\n");
     for (i = 0; i < N; i++) {
         //Imprimo el vértice
-        printf("Vertice(%d): %d\n", i, VECTOR[i]);
+        printf("Vertice(%d): %s\n", i, VECTOR[i].nombre);
         //Chequeo sus arcos
         for (j = 0; j < N; j++)
             if (son_adyacentes(G, i, j))
-                printf("\t%d-->%d\n", VECTOR[i], VECTOR[j]);
+                printf("\t%s-->%.2f/%c-->%s\n", VECTOR[i].nombre, conexion_matriz(G,i,j).dist, conexion_matriz(G,i,j).tipo, VECTOR[j].nombre);
     }
 }
 

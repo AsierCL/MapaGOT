@@ -46,7 +46,8 @@ int main(int argc, char** argv) {
             default:
                 printf("Opción equivocada\n");
         }
-    } while (opcion != 's');
+        while (getchar() != '\n');
+    } while (opcion != 'S' && opcion !='s');
 
     //Al salir, liberamos la memoria del TAD, lo destruimos
     borrar_grafo(&G);
