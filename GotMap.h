@@ -24,6 +24,7 @@ void cargarArchivoCiudades(char* nombre_archivo, grafo* G);
 void cargarArchivoCaminos(char* nombre_archivo, grafo* G);
 
 void camino_mas_corto(grafo G, char opcion);
+void min_infraestructura(grafo G, char opcion);
 
 
 #endif	/* FUNCIONES_H */

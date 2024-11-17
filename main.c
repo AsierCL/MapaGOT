@@ -23,6 +23,7 @@ int main(int argc, char** argv) {
         printf("i. Imprimir grafo\n");
         printf("m. Distancia más corta entre 2 ciudades\n");
         printf("n. Tiempo menor entre 2 ciudades\n");
+        printf("p. Infraestructura mínima para interconectar el mapa\n");
         printf("s. Salir\n");
 
         printf("Opcion: ");
@@ -58,6 +59,9 @@ int main(int argc, char** argv) {
                 }else{
                     printf("Opcion incorrecta");
                 }
+                break;
+            case 'p': case'P':
+            min_infraestructura(G,'n');
                 break;
             case 's': case 'S':
                 opcion='s';

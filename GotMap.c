@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <float.h>
 #include "grafo.h"
 
 //FUNCIONES DEL PROGRAMA DE PRUEBA DE GRAFOS
@@ -230,19 +231,6 @@ void cargarArchivoCaminos(char* nombre_archivo, grafo* G){
 
 /////////////////////////////////////////////////////////////////////////////
 
-/* 
-DESDE k=0; k<N; k++ //Analizamos matriz Dk
-    DESDE i=0;i<N;i++ //arco ik
-        DESDE j=0;j<N;j++ //arco kj
-            SI D(i,j)>D(i,k)+D(k,j) ENTONCES
-                D(i,j)=D(i,k)+D(k,j)
-                P(i,j)=P(k,j)
-            FIN_SI
-        FIN_DESDE
-    FIN_DESDE
-FIN_DESDE */
-
-
 
 void floyd_warshall_distancia(grafo G, tipoconexiones dist[MAXVERTICES][MAXVERTICES], tipoprevio pred[MAXVERTICES][MAXVERTICES], char opcion) {
     int i, j, k, vertices = num_vertices(G);
@@ -404,4 +392,100 @@ void camino_mas_corto(grafo G, char opcion) {
     printf("Ruta: ");
     reconstruir_camino(pred, pos1, pos2);
     printf("\n");
+}
+
+
+void min_infraestructura(grafo G, char opcion) {
+    int num_ciudades = num_vertices(G);
+    tipovertice *vertices = array_vertices(G);
+    int incluido[MAXVERTICES] = {0};
+    float costo[MAXVERTICES];
+    int previo[MAXVERTICES];         
+
+    /* ESTE SWITCH NO ES NECESARIO PARA EL EJERCICIO, 
+    simplemente es un añadido para que la función esté acrde con las anteriores, 
+    permitiendo buscar la infraestructura mínima en dragón y en distancia
+    En el main, se pasa la opción 'n', pero se podria pedir dicha opcion al usuario */
+    float tierra, mar;
+    switch (opcion) {
+        case 'n':
+            tierra = 5.5;
+            mar = 11.25;
+            break;
+        case 'd':
+            tierra = 80.0;
+            mar = 80.0;
+            break;
+        case 'c':
+            tierra = 1.0;
+            mar = 1.0;
+            break;
+        default:
+            printf("ERROR: Opción no válida.\n");
+            return;
+    }
+
+    // Inicializar todos los costos a infinito y los previos a -1
+    for (int i = 0; i < num_ciudades; i++) {
+        costo[i] = FLT_MAX;
+        previo[i] = -1;
+    }
+
+    // El primer nodo se incluye en el árbol y su costo es 0
+    costo[0] = 0;
+
+    for (int count = 0; count < num_ciudades - 1; count++) {
+        // Encontrar el nodo con el menor costo que aún no está incluido
+        float min_cost = FLT_MAX;
+        int u = -1;
+
+        for (int i = 0; i < num_ciudades; i++) {
+            if (!incluido[i] && costo[i] < min_cost) {
+                min_cost = costo[i];
+                u = i;
+            }
+        }
+
+        // Marcar el nodo seleccionado como incluido
+        incluido[u] = 1;
+
+        // Actualizar los costos de los nodos adyacentes
+        for (int v = 0; v < num_ciudades; v++) {
+            if (!incluido[v]) {
+                tipoconexiones conexion = conexion_matriz(G, u, v);
+                if (conexion.dist > 0) { // Hay una conexión
+                    float tiempo = conexion.dist;
+                    if (conexion.tipo == 't') {
+                        tiempo /= tierra;
+                    } else if (conexion.tipo == 'm') {
+                        tiempo /= mar;
+                    }
+
+                    if (tiempo < costo[v]) {
+                        costo[v] = tiempo;
+                        previo[v] = u;
+                    }
+                }
+            }
+        }
+    }
+
+    // Imprimir las conexiones seleccionadas
+    printf("Infraestructura mínima de conexiones:\n");
+    float costo_total = 0;
+    for (int i = 1; i < num_ciudades; i++) {
+        if (previo[i] != -1) {
+            tipoconexiones conexion = conexion_matriz(G, previo[i], i);
+            printf("%s ", vertices[previo[i]].nombre);
+            if (conexion.tipo == 't') {
+                printf("-> ");
+            } else if (conexion.tipo == 'm') {
+                printf("~> ");
+            }
+            printf("%s (costo: %.2f)\n", vertices[i].nombre, costo[i]);
+            costo_total += costo[i];
+        }
+    }
+
+    printf("Costo total de la infraestructura mínima: %.2f\n", costo_total);
 }
