@@ -21,6 +21,8 @@ int main(int argc, char** argv) {
         printf("c. Crear arco\n");
         printf("d. Eliminar arco\n");
         printf("i. Imprimir grafo\n");
+        printf("m. Distancia más corta entre 2 ciudades\n");
+        printf("n. Tiempo menor entre 2 ciudades\n");
         printf("s. Salir\n");
 
         printf("Opcion: ");
@@ -41,6 +43,21 @@ int main(int argc, char** argv) {
                 break;
             case 'i': case 'I':
                 imprimir_grafo(G);
+                break;
+            case 'm': case 'M':
+                camino_mas_corto(G,'c');
+                break;
+            case 'n': case 'N':
+                char dragon;
+                printf("El viaje será en dragón? (y/n): ");
+                scanf(" %c",&dragon);
+                if(dragon=='y'){
+                    camino_mas_corto(G,'d');
+                }else if(dragon=='n'){
+                    camino_mas_corto(G,'n');
+                }else{
+                    printf("Opcion incorrecta");
+                }
                 break;
             case 's': case 'S':
                 opcion='s';

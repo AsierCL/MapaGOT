@@ -1,9 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "grafo.h"
 
 //FUNCIONES DEL PROGRAMA DE PRUEBA DE GRAFOS
+
+typedef struct{
+    int prev;
+    char nombre[MAXNOMBRES];
+    char tipo;
+} tipoprevio;
 
 //Opción a del menú, introducir un vertice en el grafo
 
@@ -218,4 +225,183 @@ void cargarArchivoCaminos(char* nombre_archivo, grafo* G){
 
     // Cierro el archivo
     fclose(archivo_personajes);
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+
+/* 
+DESDE k=0; k<N; k++ //Analizamos matriz Dk
+    DESDE i=0;i<N;i++ //arco ik
+        DESDE j=0;j<N;j++ //arco kj
+            SI D(i,j)>D(i,k)+D(k,j) ENTONCES
+                D(i,j)=D(i,k)+D(k,j)
+                P(i,j)=P(k,j)
+            FIN_SI
+        FIN_DESDE
+    FIN_DESDE
+FIN_DESDE */
+
+
+
+void floyd_warshall_distancia(grafo G, tipoconexiones dist[MAXVERTICES][MAXVERTICES], tipoprevio pred[MAXVERTICES][MAXVERTICES], char opcion) {
+    int i, j, k, vertices = num_vertices(G);
+    tipovertice *arrayvertices = array_vertices(G);
+    float tierra, mar;
+    switch (opcion)
+    {
+    case 'n':
+        tierra=5.5;
+        mar=11.25;
+        break;
+    case 'd':
+        tierra=80.0;
+        mar=80.0;
+        break;
+    case 'c':
+        tierra=1.0;
+        mar=1.0;
+        break;
+    default:
+        printf("ERROR\n");
+        break;
+    }
+    
+    // Inicialización de las matrices de distancias y predecesores
+    for (i = 0; i < vertices; i++) {
+        for (j = 0; j < vertices; j++) {
+            if (i == j) {
+                dist[i][j].dist = 0; // La distancia a sí mismo es 0
+                dist[i][j].tipo = '-';
+
+                pred[i][j].prev = i; // Predecesor de sí mismo
+                strcpy(pred[i][j].nombre,arrayvertices[i].nombre); // Predecesor de sí mismo
+                pred[i][j].tipo = '-'; // Predecesor de sí mismo
+            } else {
+                tipoconexiones conexion = conexion_matriz(G, i, j);
+                if (conexion.dist > 0) { // Existe una conexión
+                    dist[i][j] = conexion;
+                    if(dist[i][j].tipo!='t'){
+                        dist[i][j].dist /= tierra;
+                    }else{
+                        dist[i][j].dist /= mar;
+                    }
+                    pred[i][j].prev = i;
+                    strcpy(pred[i][j].nombre,arrayvertices[i].nombre);
+                    pred[i][j].tipo = conexion.tipo;
+                } else { // No hay conexión
+                    dist[i][j].dist = INFINITY;
+                    dist[i][j].tipo = '-';
+                    pred[i][j].prev = -1;
+                }
+            }
+        }
+    }
+
+    // Algoritmo de Floyd-Warshall
+    for (k = 0; k < vertices; k++) {
+        for (i = 0; i < vertices; i++) {
+            for (j = 0; j < vertices; j++) {
+                if (dist[i][k].dist + dist[k][j].dist < dist[i][j].dist) {
+                    dist[i][j].dist = dist[i][k].dist + dist[k][j].dist;
+                    pred[i][j] = pred[k][j];
+                }
+            }
+        }
+    }
+}
+
+// Imprime el camino mínimo desde 'start' hasta 'end' usando la matriz de predecesores 'pred'.
+// Devuelve 1 si hay un camino y 0 si no lo hay.
+int imprimir_camino(int pred[MAXVERTICES][MAXVERTICES], int start, int end) {
+    if (pred[start][end] == -1) { // No hay camino entre start y end
+        printf("No existe un camino entre los nodos %d y %d.\n", start, end);
+        return 0;
+    }
+
+    // Array para almacenar el camino mínimo en orden inverso
+    int camino[MAXVERTICES];
+    int n = 0; // Índice para el camino
+
+    // Recorremos desde el destino hacia el origen
+    int actual = end;
+    while (actual != start) {
+        camino[n++] = actual;
+        actual = pred[start][actual];
+    }
+    camino[n++] = start; // Añadimos el origen al final del camino
+
+    // Imprimir el camino en el orden correcto (desde 'start' a 'end')
+    printf("Camino mínimo de %d a %d: ", start, end);
+    for (int i = n - 1; i >= 0; i--) {
+        printf("%d ", camino[i]);
+        if (i > 0) printf("-> ");
+    }
+    printf("\n");
+    return 1;
+}
+
+// Función auxiliar para reconstruir el camino a partir de la matriz de predecesores
+void reconstruir_camino(tipoprevio pred[MAXVERTICES][MAXVERTICES], int inicio, int fin) {
+    if (inicio != fin){
+        reconstruir_camino(pred, inicio, pred[inicio][fin].prev);
+        if(pred[pred[inicio][fin].prev][fin].tipo = 't'){
+            printf("-> ");
+        }else if(pred[pred[inicio][fin].prev][fin].tipo = 'm'){
+            printf("~> ");
+        }else{
+            printf("Error");
+        }
+    }
+    printf("%s ", pred[fin][fin].nombre);
+}
+
+void camino_mas_corto(grafo G, char opcion) {
+    tipovertice v1, v2;
+    int pos1, pos2;
+
+    printf("Buscar el camino más corto:\n");
+    
+    // Ciudad origen
+    printf("Introduce la ciudad origen: ");
+    scanf(" %[^\n\r]", v1.nombre);
+    if (!existe_vertice(G, v1)) {
+        printf("El vertice %s no existe en el grafo\n", v1.nombre);
+        return;
+    }
+    
+    // Ciudad destino
+    printf("Introduce la ciudad destino: ");
+    scanf(" %[^\n\r]", v2.nombre);
+    if (!existe_vertice(G, v2)) {
+        printf("El vertice %s no existe en el grafo\n", v2.nombre);
+        return;
+    }
+
+    // Obtenemos las posiciones de los vértices en el grafo
+    pos1 = posicion(G, v1);
+    pos2 = posicion(G, v2);
+    
+    // Matriz de distancias y predecesores
+    tipoconexiones dist[MAXVERTICES][MAXVERTICES];
+    tipoprevio pred[MAXVERTICES][MAXVERTICES];
+
+    ///////////////////////OPCION AQUI//////////////////////////
+
+    // Calculamos el camino más corto para todas las parejas de vértices
+    floyd_warshall_distancia(G, dist, pred, opcion);
+
+    // Si no hay un camino entre las ciudades
+    if (dist[pos1][pos2].dist == INFINITY) {
+        printf("No existe un camino entre %s y %s.\n", v1.nombre, v2.nombre);
+        return;
+    }
+
+    // Mostramos la distancia más corta
+    printf("La distancia más corta entre %s y %s es %.2f.\n", v1.nombre, v2.nombre, dist[pos1][pos2].dist);
+
+    // Mostramos el camino más corto utilizando la matriz de predecesores
+    printf("Ruta: ");
+    reconstruir_camino(pred, pos1, pos2);
+    printf("\n");
 }
